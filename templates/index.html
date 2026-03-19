@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FraudGuard - Smart Bank Fraud Detection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="nav">
+        <div class="nav__brand">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            FraudGuard
+        </div>
+        <nav class="nav__links">
+            <a href="{{ url_for('home') }}" class="active">Home</a>
+            <a href="{{ url_for('predict') }}">Predict</a>
+            <a href="{{ url_for('about') }}">About</a>
+            <a href="{{ url_for('contact') }}">Contact</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero__content fade-in">
+                <span class="hero__label">Next-Gen Security</span>
+                <h1>Real-time Bank Fraud Detection</h1>
+                <p>Protect your network with federated learning. Detect suspicious transactions in milliseconds using collaborative models without compromising customer data privacy.</p>
+                <div class="hero__actions">
+                    <a class="btn btn--primary" href="{{ url_for('predict') }}">
+                        Run Live Prediction
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </a>
+                    <a class="btn btn--ghost" href="{{ url_for('about') }}">Learn How It Works</a>
+                </div>
+                <div class="hero__stats fade-in delay-1">
+                    <div class="stat-item">
+                        <span class="stat-num">4+</span>
+                        <span class="stat-label">Banks</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-num">&lt;10ms</span>
+                        <span class="stat-label">Latency</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-num">99.2%</span>
+                        <span class="stat-label">Accuracy</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero__visual fade-in delay-2">
+                <div class="glow-orb"></div>
+                <div style="width: 100%; max-width: 400px; z-index: 2;">
+                    <div class="card">
+                        <h3 style="margin-top:0; font-size:1.2rem; display:flex; align-items:center; gap:0.5rem;">
+                            <span style="display:inline-block; width:8px; height:8px; background:var(--success); border-radius:50%; box-shadow:0 0 10px var(--success);"></span>
+                            Live System Monitor
+                        </h3>
+                        <p style="color:var(--text-muted); font-size:0.9rem;">Global model is active and scoring transactions.</p>
+                        
+                        <div class="pills" style="margin-top:1.5rem;">
+                            <span class="pill pill-success">Normal</span>
+                            <span class="pill pill-warning">Review</span>
+                            <span class="pill pill-danger">Fraud</span>
+                        </div>
+
+                        <div class="slider">
+                            <div class="slider-track">
+                                <div class="slide-item">
+                                    <h4>Federated Learning</h4>
+                                    <p>Decentralized training keeps data private.</p>
+                                </div>
+                                <div class="slide-item">
+                                    <h4>Real-time Scoring</h4>
+                                    <p>Flagging threats before processing.</p>
+                                </div>
+                                <div class="slide-item">
+                                    <h4>Explainable AI</h4>
+                                    <p>Clear signals for human review.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section__title fade-in">Why Choose FraudGuard?</h2>
+            <div class="grid">
+                <div class="card grid-item fade-in delay-1">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
+                    </div>
+                    <h3>Privacy-First AI</h3>
+                    <p>Banks train the model locally. Only model weights are shared, ensuring absolute compliance with data privacy laws.</p>
+                </div>
+                <div class="card grid-item fade-in delay-2">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    </div>
+                    <h3>Millisecond Decisions</h3>
+                    <p>The global compiled model is optimized for instant inference, allowing real-time intervention on the payment rail.</p>
+                </div>
+                <div class="card grid-item fade-in delay-3">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                    </div>
+                    <h3>Intuitive Dashboard</h3>
+                    <p>Built for production. A beautiful interface makes it easy for fraud analysts to predict, review, and act on alerts.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 FraudGuard Technologies. Federated Fraud Detection.</p>
+    </footer>
+</body>
+</html>

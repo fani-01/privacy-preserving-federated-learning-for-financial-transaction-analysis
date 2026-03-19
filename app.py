@@ -8,9 +8,9 @@ time.sleep(5)  # Wait for the server to start
 
 client_processes = []
 
-for aid in ["1", "2"]:
+for aid in ["1", "2","3","4"]:
     env = os.environ.copy()
-    env["AIRFARE_ID"] = aid
+    env["bank_ID"] = aid
     p = subprocess.Popen(["python", "client.py"], env=env)
     client_processes.append(p)
 

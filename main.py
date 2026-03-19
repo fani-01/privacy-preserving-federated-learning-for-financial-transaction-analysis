@@ -1,62 +1,86 @@
-import streamlit as st
-import torch
-import os
+from flask import Flask, render_template, request, redirect, url_for
+from model import load_federated_model, predict_fraud
+import joblib
 
-# Title
-st.title("Federated Learning Model Dashboard")
+app = Flask(__name__)
 
-# Model Paths
-hospital_models = {
-    "Hospital 1": "hospital_1_model.pth",
-    "Hospital 2": "hospital_2_model.pth",
-    "Hospital 3": "hospital_3_model.pth",
-    "Hospital 4": "hospital_4_model.pth",
-}
-global_model_path = "federated_model.pth"
+# ------------------ Config ------------------
+CATEGORICAL_COLS = [
+    "Gender",
+    "State",
+    "City",
+    "Bank",
+    "Account_Type",
+    "Transaction_Type",
+    "Merchant_Category",
+    "Transaction_Device",
+    "Device_Type",
+]
 
-# Load Model Weights
-def load_model_weights(model_path):
-    if os.path.exists(model_path):
-        return torch.load(model_path)
-    return None
+NUMERIC_COLS = ["Age", "Transaction_Amount", "Account_Balance"]
 
-# Sidebar - Select Model
-st.sidebar.header("Select Model to View")
-selected_hospital = st.sidebar.selectbox("Choose a Hospital Model", list(hospital_models.keys()))
-selected_model_path = hospital_models[selected_hospital]
+INPUT_SIZE = 12
+MODEL_PATH = "federated_model.pth"
 
-# Load the selected hospital model
-hospital_weights = load_model_weights(selected_model_path)
+# ------------------ Load Model & Encoders ------------------
+model = load_federated_model(MODEL_PATH, INPUT_SIZE)
 
-if hospital_weights:
-    st.success(f"Weights for {selected_hospital} loaded successfully!")
-else:
-    st.error(f"No model found for {selected_hospital}")
+try:
+    label_encoders = joblib.load("label_encoders.pkl")
+    CATEGORY_OPTIONS = {
+        col: list(enumerate(label_encoders[col].classes_))
+        for col in CATEGORICAL_COLS
+        if col in label_encoders
+    }
+except Exception:
+    # If encoders are missing, fall back to empty options
+    CATEGORY_OPTIONS = {col: [] for col in CATEGORICAL_COLS}
 
-# Federated Aggregation Function
-def federated_aggregation(models):
-    """Aggregate weights from multiple hospitals."""
-    num_clients = len(models)
-    aggregated_weights = {}
 
-    for key in models[0].keys():
-        aggregated_weights[key] = sum(model[key] for model in models) / num_clients
+# ------------------ Routes ------------------
+@app.route("/")
+def home():
+    return render_template("index.html")
 
-    return aggregated_weights
 
-# Aggregate and Save Federated Model
-if st.button("Aggregate Federated Model"):
-    all_models = [load_model_weights(path) for path in hospital_models.values()]
+@app.route("/predict", methods=["GET", "POST"])
+def predict():
+    if request.method == "POST":
+        values = []
 
-    if None in all_models:
-        st.error("Some models are missing. Train all hospital models first.")
-    else:
-        federated_weights = federated_aggregation(all_models)
-        torch.save(federated_weights, global_model_path)
-        st.success("Federated model created successfully!")
+        # Categorical (label-encoded via dropdown values)
+        for col in CATEGORICAL_COLS:
+            values.append(float(request.form[col]))
 
-# Check if Federated Model Exists
-if os.path.exists(global_model_path):
-    st.success("Federated model loaded successfully!")
-else:
-    st.warning("Federated model not yet created. Click 'Aggregate Federated Model' to generate.")
+        # Numeric
+        for col in NUMERIC_COLS:
+            values.append(float(request.form[col]))
+
+        prediction, confidence = predict_fraud(model, values)
+
+        return render_template(
+            "result.html",
+            prediction=prediction,
+            confidence=confidence,
+        )
+
+    return render_template(
+        "predict.html",
+        categorical_cols=CATEGORICAL_COLS,
+        numeric_cols=NUMERIC_COLS,
+        category_options=CATEGORY_OPTIONS,
+    )
+
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+
+@app.route("/contact")
+def contact():
+    return render_template("contact.html")
+
+
+if __name__ == "__main__":
+    app.run(debug=True)

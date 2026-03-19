@@ -13,12 +13,12 @@ from sklearn.model_selection import train_test_split
 # CONFIG
 # -----------------------------
 
-TARGET_COLUMN = "price"
+TARGET_COLUMN = "Is_Fraud"
 
 # pick which dataset this client loads
-CLIENT_ID = os.getenv("AIRFARE_ID", "1")   # "1", "2", "3", "4"
+CLIENT_ID = os.getenv("bank_ID", "1")   # "1", "2", "3", "4"
 
-CSV_PATH = f"airfare_{CLIENT_ID}.csv"       # your 4 encoded files
+CSV_PATH = f"bank_{CLIENT_ID}.csv"       # your 4 encoded files
 
 
 # -----------------------------
@@ -152,3 +152,6 @@ if __name__ == "__main__":
         server_address="127.0.0.1:8080",
         client=FlowerClient().to_client(),
     )
+
+
+
